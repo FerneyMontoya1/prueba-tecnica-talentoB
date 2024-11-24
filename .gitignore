@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+*.swp
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+
+# Entornos virtuales
+env/
+venv/
+ENV/
+.venv/
+env.bak/
+venv.bak/
+
+# Archivos de configuración de IDEs
+.vscode/
+.idea/
+
+# Archivos de logs
+*.log
+
+# Archivos de datos
+*.csv
+*.tsv
+*.json
+*.xls
+*.xlsx
+*.sqlite
+
+# Modelos entrenados
+*.h5
+*.pkl
+*.joblib
+
+# Archivos temporales
+*.bak
+*.swp
+*.swo
+*.tmp
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Archivos generados por la documentación
+docs/_build/
