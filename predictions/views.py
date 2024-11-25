@@ -7,7 +7,9 @@ from .services.prediction_service import (
     load_model,
     make_predictions,
 )
+from django.views.decorators.csrf import csrf_exempt
 
+@csrf_exempt
 def upload_and_predict(request):
     if request.method == "POST" and request.FILES.get("excel_file"):
         excel_file = request.FILES["excel_file"]
