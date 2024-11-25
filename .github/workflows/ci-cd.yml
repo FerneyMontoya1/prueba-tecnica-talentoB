@@ -38,7 +38,7 @@ jobs:
         export PATH="$HOME/.railway/bin:$PATH"
 
     - name: Deploy to Railway
+      run: |
+        railway up -- --project=${{ secrets.RAILWAY_PROJECT_ID }}
       env:
         RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-      run: |
-        railway up --project=${{ secrets.RAILWAY_PROJECT_ID }}
