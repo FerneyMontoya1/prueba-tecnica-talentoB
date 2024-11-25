@@ -46,6 +46,7 @@ venv.bak/
 # Archivos de sistema
 .DS_Store
 Thumbs.db
+db.sqlite3
 
 # Archivos generados por la documentación
 docs/_build/

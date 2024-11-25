@@ -1,0 +1,1 @@
+web: gunicorn prueba_tecnica_talentoB.wsgi
