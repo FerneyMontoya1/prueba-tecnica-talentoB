@@ -45,6 +45,8 @@ jobs:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
 
   deploy:
+    # Indica que este job depende de `build`
+    needs: build
     runs-on: ubuntu-latest
     container: ghcr.io/railwayapp/cli:latest
     env:
