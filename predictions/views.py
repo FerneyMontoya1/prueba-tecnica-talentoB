@@ -1,53 +1,47 @@
-import pandas as pd
-import joblib
 from django.shortcuts import render
 from django.http import HttpResponse
+from .services.prediction_service import (
+    validate_file_extension,
+    load_excel_file,
+    validate_columns,
+    load_model,
+    make_predictions,
+)
 
 def upload_and_predict(request):
     if request.method == "POST" and request.FILES.get("excel_file"):
         excel_file = request.FILES["excel_file"]
 
         try:
-            # Verifica si el archivo tiene la extensión correcta
-            if not excel_file.name.endswith(".xlsx"):
-                return HttpResponse("Por favor, cargue un archivo Excel válido con extensión .xlsx.", status=400)
+            # Validación de la extensión del archivo
+            validate_file_extension(excel_file.name)
 
-            # Intenta leer el archivo Excel
-            try:
-                data = pd.read_excel(excel_file)
-            except Exception as e:
-                return HttpResponse(f"Error al leer el archivo Excel: {str(e)}", status=400)
+            # Cargar el archivo Excel
+            data = load_excel_file(excel_file)
 
-            # Verifica si las columnas necesarias están presentes
+            # Validar columnas necesarias
             required_columns = ["sepal_length", "sepal_width", "petal_length", "petal_width"]
-            if not all(col in data.columns for col in required_columns):
-                return HttpResponse("El archivo no contiene las columnas necesarias: sepal_length, sepal_width, petal_length, petal_width", status=400)
+            validate_columns(data, required_columns)
 
-            # Carga el modelo entrenado
-            try:
-                model = joblib.load("predictions/model/iris_model.pkl")
-            except FileNotFoundError:
-                return HttpResponse("El archivo del modelo no se encontró. Verifica la ruta y vuelve a intentarlo.", status=500)
-            except Exception as e:
-                return HttpResponse(f"Error al cargar el modelo: {str(e)}", status=500)
+            # Cargar el modelo
+            model_path = "predictions/model/iris_model.pkl"
+            model = load_model(model_path)
 
-            # Realiza las predicciones con las características numéricas
-            try:
-                features = data[required_columns]
-                predictions = model.predict(features)
-            except ValueError as ve:
-                return HttpResponse(f"Error en las predicciones: {str(ve)}. Verifique los datos del archivo.", status=400)
-            except Exception as e:
-                return HttpResponse(f"Error inesperado al realizar las predicciones: {str(e)}", status=500)
+            # Realizar predicciones
+            features = data[required_columns]
+            predictions = make_predictions(model, features)
 
-            # Agrega las predicciones al DataFrame
+            # Agregar predicciones al DataFrame
             data["Predictions"] = predictions
 
-            # Envía los resultados a la plantilla
+            # Renderizar los resultados
             return render(request, "predictions/results.html", {"table": data.to_html()})
 
+        except ValueError as ve:
+            return HttpResponse(str(ve), status=400)
+        except FileNotFoundError as fnfe:
+            return HttpResponse(str(fnfe), status=500)
         except Exception as e:
             return HttpResponse(f"Error inesperado: {str(e)}", status=500)
 
-    # Renderiza la página de subida en caso de solicitud GET o ausencia del archivo
     return render(request, "predictions/upload.html")
