@@ -26,35 +26,16 @@ jobs:
         run: |
           docker build -t prueba_tecnica_talentob .
 
-      # Paso 4: Ejecutar pruebas unitarias
-      - name: Run Unit Tests
-        run: |
-          docker run --rm prueba_tecnica_talentob python -m unittest discover -s predictions -p "tests.py"
-
-  deploy:
+  test:
     needs: build
     runs-on: ubuntu-latest
+
     steps:
-      # Paso 1: Checkout del código
+      # Paso 1: Checkout el código
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # Paso 2: Instalar Railway CLI
-      - name: Install Railway CLI
+      # Paso 2: Ejecutar pruebas unitarias
+      - name: Run Unit Tests
         run: |
-          curl -fsSL https://railway.app/install.sh | sh
-          export PATH="$HOME/.railway/bin:$PATH"
-
-      # Paso 3: Enlazar el proyecto Railway
-      - name: Link Railway Project
-        run: |
-          railway link --project=7f8505a1-6486-460b-9c8e-9b9d2e246300
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-
-      # Paso 4: Desplegar el servicio
-      - name: Deploy to Railway
-        run: |
-          railway up
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          docker run --rm prueba_tecnica_talentob python -m unittest discover -s predictions -p "tests.py"
