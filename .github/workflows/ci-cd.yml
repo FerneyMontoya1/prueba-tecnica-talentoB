@@ -45,9 +45,15 @@ jobs:
           curl -fsSL https://railway.app/install.sh | sh
           export PATH="$HOME/.railway/bin:$PATH"
 
-      # Paso 3: Configurar y hacer deploy
+      # Paso 3: Enlazar el proyecto Railway
+      - name: Link Railway Project
+        run: |
+          railway link --project=7f8505a1-6486-460b-9c8e-9b9d2e246300 --token=${{ secrets.RAILWAY_TOKEN }}
+
+      # Paso 4: Desplegar el servicio
       - name: Deploy to Railway
         run: |
-          railway up --service=7f8505a1-6486-460b-9c8e-9b9d2e246300
+          railway up
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+
