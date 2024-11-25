@@ -35,21 +35,10 @@ jobs:
     # Indica que este job depende de `build`
     needs: build
     runs-on: ubuntu-latest
+    container: ghcr.io/railwayapp/cli:latest
+    env:
+      SVC_ID: 7f8505a1-6486-460b-9c8e-9b9d2e246300
+      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
     steps:
-      # Paso 1: Checkout del código
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      # Paso 2: Instalar Railway CLI
-      - name: Install Railway CLI
-        run: |
-          curl -fsSL https://railway.app/install.sh | sh
-          export PATH="$HOME/.railway/bin:$PATH"
-
-      # Paso 3: Configurar Railway y desplegar
-      - name: Deploy to Railway
-        run: |
-          railway link 415f6811-0119-4553-8514-973d2439123d
-          railway up --service 7f8505a1-6486-460b-9c8e-9b9d2e246300
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      - uses: actions/checkout@v3
+      - run: railway up --service=${{ env.SVC_ID }}
