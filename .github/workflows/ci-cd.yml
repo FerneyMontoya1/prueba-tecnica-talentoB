@@ -1,0 +1,39 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Paso 1: Checkout el código
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    # Paso 2: Configurar Docker
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    # Paso 3: Construir la imagen Docker
+    - name: Build Docker Image
+      run: |
+        docker build -t prueba_tecnica_talentoB .
+
+    # Paso 4: Ejecutar pruebas unitarias
+    - name: Run Unit Tests
+      run: |
+        docker run --rm prueba_tecnica_talentoB python -m unittest discover -s predictions -p "tests.py"
+
+    # Paso 5: Desplegar a Railway
+    - name: Deploy to Railway
+      uses: railwayapp/railway-action@v1
+      with:
+        token: ${{ secrets.RAILWAY_TOKEN }}
+        project: ${{ secrets.RAILWAY_PROJECT_ID }}
