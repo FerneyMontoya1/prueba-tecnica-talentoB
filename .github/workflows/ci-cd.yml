@@ -49,6 +49,7 @@ jobs:
       # Paso 3: Configurar Railway y desplegar
       - name: Deploy to Railway
         run: |
-          railway up -- --project 415f6811-0119-4553-8514-973d2439123d --service 7f8505a1-6486-460b-9c8e-9b9d2e246300
+          railway link 415f6811-0119-4553-8514-973d2439123d
+          railway up --service 7f8505a1-6486-460b-9c8e-9b9d2e246300
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
