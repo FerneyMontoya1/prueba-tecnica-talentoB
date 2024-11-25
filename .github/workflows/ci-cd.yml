@@ -26,16 +26,9 @@ jobs:
         run: |
           docker build -t prueba_tecnica_talentob .
 
-  test:
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-      # Paso 1: Checkout el código
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      # Paso 2: Ejecutar pruebas unitarias
+      # Paso 4: Ejecutar pruebas unitarias
       - name: Run Unit Tests
         run: |
           docker run --rm prueba_tecnica_talentob python -m unittest discover -s predictions -p "tests.py"
+
+
