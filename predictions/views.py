@@ -11,6 +11,9 @@ from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
 def upload_and_predict(request):
+    table = None  # Inicializa la tabla como `None`
+    error_message = None  # Variable para manejar errores
+
     if request.method == "POST" and request.FILES.get("excel_file"):
         excel_file = request.FILES["excel_file"]
 
@@ -36,14 +39,17 @@ def upload_and_predict(request):
             # Agregar predicciones al DataFrame
             data["Predictions"] = predictions
 
-            # Renderizar los resultados
-            return render(request, "predictions/results.html", {"table": data.to_html()})
+            # Convertir la tabla en HTML
+            table = data.to_html(
+                classes="table table-bordered table-striped", index=False, justify="center"
+            )
 
         except ValueError as ve:
-            return HttpResponse(str(ve), status=400)
+            error_message = str(ve)
         except FileNotFoundError as fnfe:
-            return HttpResponse(str(fnfe), status=500)
+            error_message = str(fnfe)
         except Exception as e:
-            return HttpResponse(f"Error inesperado: {str(e)}", status=500)
+            error_message = f"Error inesperado: {str(e)}"
 
-    return render(request, "predictions/upload.html")
+    # Renderizar el formulario y, si existe, la tabla
+    return render(request, "predictions/upload.html", {"table": table, "error_message": error_message})

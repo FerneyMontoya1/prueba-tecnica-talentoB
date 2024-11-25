@@ -34,7 +34,6 @@ venv.bak/
 
 # Modelos entrenados
 *.h5
-*.pkl
 *.joblib
 
 # Archivos temporales
