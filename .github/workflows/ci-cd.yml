@@ -24,12 +24,12 @@ jobs:
     # Paso 3: Construir la imagen Docker
     - name: Build Docker Image
       run: |
-        docker build -t prueba_tecnica_talentoB .
+        docker build -t prueba_tecnica_talentob .
 
     # Paso 4: Ejecutar pruebas unitarias
     - name: Run Unit Tests
       run: |
-        docker run --rm prueba_tecnica_talentoB python -m unittest discover -s predictions -p "tests.py"
+        docker run --rm prueba_tecnica_talentob python -m unittest discover -s predictions -p "tests.py"
 
     # Paso 5: Desplegar a Railway
     - name: Install Railway CLI
