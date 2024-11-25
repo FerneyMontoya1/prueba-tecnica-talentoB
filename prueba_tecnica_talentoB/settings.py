@@ -127,3 +127,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATIC_DIRS = [
   os.path.join(BASE_DIR, 'predictions/static')
 ]
+
+ALLOWED_HOSTS = ['localhost', 'web-production-cfa5.up.railway.app']
