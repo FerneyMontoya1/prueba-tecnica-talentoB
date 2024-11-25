@@ -31,19 +31,6 @@ jobs:
         run: |
           docker run --rm prueba_tecnica_talentob python -m unittest discover -s predictions -p "tests.py"
 
-      # Paso 5: Instalar Railway CLI
-      - name: Install Railway CLI
-        run: |
-          curl -fsSL https://railway.app/install.sh | sh
-          export PATH="$HOME/.railway/bin:$PATH"
-
-      # Paso 6: Desplegar a Railway
-      - name: Deploy to Railway
-        run: |
-          railway up -- --project=${{ secrets.RAILWAY_PROJECT_ID }}
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-
   deploy:
     # Indica que este job depende de `build`
     needs: build
