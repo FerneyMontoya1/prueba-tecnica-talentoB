@@ -198,6 +198,34 @@
         .table-bordered td {
             border: 1px solid #6a0dad; /* Bordes morados */
         }
+
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-top: 16px;
+        }
+        
+        .card-body {
+            padding: 16px;
+        }
+        
+        .list-group-item {
+            font-size: 16px;
+            padding: 10px 16px;
+            border: none;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .list-group-item:last-child {
+            border-bottom: none;
+        }
+        
+        .badge {
+            font-size: 14px;
+            padding: 6px 10px;
+        }
+        
     </style>
 </head>
 <body>
@@ -284,7 +312,7 @@
                 {% if table %}
                     <div class="mb-3">
                         
-                        <div class="table-responsive">
+                        <div class="table-responsive" style="max-height: 600px; overflow-y: auto;">
                             <table class="table table-striped table-hover table-bordered align-middle">
                                 {{ table|safe }}
                             </table>
@@ -293,10 +321,40 @@
                     </div>
                 {% else %}
                     <p>No se han generado resultados aún. Por favor, carga un archivo.</p>
+                    <p>Si no tiene uno, por favor descargue el siguiente archivo Excel de prueba: <a href="https://docs.google.com/spreadsheets/d/1PF2AIta3LV15Mq5JrIwq8mpXNEzuwXLS/edit?usp=sharing&ouid=100339178753591638653&rtpof=true&sd=true" target="_blank">Descargar</a></p>
                 {% endif %}
             </div>
         </div>
     </main>
+
+    {% if stats %}
+    <div class="my-4 col-6 mx-auto">
+        <h2 class="text-center mb-3">Frecuencia de Clases Predichas</h2>
+        <div class="card">
+            <div class="card-body">
+                <ul class="list-group">
+                    {% for class, count in stats.class_distribution.items %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span class="badge primary-color text-light rounded-pill">
+                            {{ class }}
+                        </span>
+                        {% if class == 0 %}
+                        <span>Iris Setosa</span>
+                        {% elif class == 1 %}
+                        <span>Iris Versicolor</span>
+                        {% else %}
+                        <span>Iris Virginica</span>
+                        {% endif %}
+                        <span>{{ count }} predicciones</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+
 
     <footer class="bg-dark text-white text-center py-3 mt-5">
         <p>&copy; 2024 Predicción de Iris. Prueba técnica Talento b. Hecho por Ferney Montoya</p>

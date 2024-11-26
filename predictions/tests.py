@@ -47,11 +47,14 @@ class TestUtilityFunctions(unittest.TestCase):
             validate_columns(data, ["col1", "col2"])
         self.assertIn("El archivo no contiene las columnas necesarias: col1, col2", str(context.exception))
 
-    @patch("joblib.load")
-    def test_load_model_valid(self, mock_joblib_load):
-        mock_joblib_load.return_value = "mock_model"
-        model = load_model("dummy_path")
-        self.assertEqual(model, "mock_model")
+    def test_load_model_valid(self):
+        with patch("predictions.services.prediction_service.joblib.load") as mock_load:
+            mock_load.return_value = Mock()  # Simula que solo se carga el modelo
+            model = load_model("dummy_path")
+            self.assertIsNotNone(model)
+            mock_load.assert_called_once_with("dummy_path")
+
+
 
     @patch("joblib.load")
     def test_load_model_file_not_found(self, mock_joblib_load):
