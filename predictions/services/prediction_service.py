@@ -8,13 +8,9 @@ def validate_file_extension(file_name):
 
 def load_excel_file(file):
     try:
-        data = pd.read_excel(file)
-        data = data.replace(',', '.', regex=True)  # Reemplazo sin conversión automática
-        return data
+        return pd.read_excel(file)
     except Exception as e:
         raise ValueError(f"Error al leer el archivo Excel: {str(e)}")
-
-
 
 def validate_columns(data, required_columns):
     if not all(col in data.columns for col in required_columns):
@@ -22,12 +18,17 @@ def validate_columns(data, required_columns):
 
 def load_model(model_path):
     try:
-        model = joblib.load(model_path)  # Carga el modelo
-        return model
+        loaded_object = joblib.load(model_path)
+        if isinstance(loaded_object, tuple):
+            model, accuracy = loaded_object  
+            print(f"Modelo cargado con precisión: {accuracy:.2f}")
+            return model
+        return loaded_object  
     except FileNotFoundError:
         raise FileNotFoundError("El archivo del modelo no se encontró. Verifica la ruta y vuelve a intentarlo.")
     except Exception as e:
         raise Exception(f"Error al cargar el modelo: {str(e)}")
+
 
 def make_predictions(model, features):
     try:
